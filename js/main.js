@@ -31,21 +31,29 @@ var objects = function () {
         'y': Math.random() * (630 - 130) + 130,
       }
     };
-    objectsList.appendChild(obj);
-  }
-
-  var map = document.querySelector('.map');
-  map.classList.remove('map--faded');
-
-  var mapPins = document.querySelector('.map__pins');
-  var pin = document.querySelector('#pin')
-  .content
-  .querySelector('.map__pin');
-
-  for (var j = 0; j < objectsList.length; j++) {
-    var mapElement = pin.cloneNode(true);
-    mapPins.appendChild(mapElement);
+    objectsList.push(obj);
+    return objectsList;
   }
 };
 
+var map = document.querySelector('.map');
+map.classList.remove('map--faded');
 
+var mocks = objects();
+var mapPins = document.querySelector('.map__pins');
+var pin = document.querySelector('#pin')
+.content
+.querySelector('.map__pin');
+
+var fragment = document.createDocumentFragment();
+for (var j = 0; j < mocks.length; j++) {
+  var mapElement = pin.cloneNode(true);
+  var mock = mocks[j];
+  mapElement.style.left = (mock.location.x - 25) + 'px';
+  mapElement.style.top = (mock.location.y - 70) + 'px';
+  var img = mapElement.querySelector('img');
+  img.src = mock.author.avatar;
+  img.alt = mock.offer.title;
+  fragment.appendChild(mapElement);
+}
+mapPins.appendChild(fragment);
