@@ -32,8 +32,8 @@ var objects = function () {
       }
     };
     objectsList.push(obj);
-    return objectsList;
   }
+  return objectsList;
 };
 
 var map = document.querySelector('.map');
