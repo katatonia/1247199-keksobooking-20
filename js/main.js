@@ -36,9 +36,6 @@ var objects = function () {
   return objectsList;
 };
 
-var map = document.querySelector('.map');
-map.classList.remove('map--faded');
-
 var mocks = objects();
 var mapPins = document.querySelector('.map__pins');
 var pin = document.querySelector('#pin')
@@ -57,3 +54,30 @@ for (var j = 0; j < mocks.length; j++) {
   fragment.appendChild(mapElement);
 }
 mapPins.appendChild(fragment);
+
+var adFormFieldsets = document.querySelector('.ad-form fieldset');
+adFormFieldsets.setAttribute('disabled', 'disabled');
+
+var mapFilters = document.querySelector('.map__filters');
+mapFilters.classList.add('map__filters--disabled');
+
+var mapPinMain = document.querySelector('.map__pin--main');
+mapPinMain.addEventListener('mousedown', function (evt) {
+  if (evt.which === 1) {
+    var map = document.querySelector('.map');
+    map.classList.remove('map--faded');
+    var adForm = document.querySelector('.ad-form');
+    adForm.classList.remove('ad-form--disabled');
+    adFormFieldsets.removeAttribute('disabled');
+    mapFilters.classList.remove('map__filters--disabled');
+  };
+  var adFormAddress = document.querySelector('#address');
+  adFormAddress.textContent = evt.target.value;
+});
+
+mapPinMain.addEventListener('keydown', function (evt) {
+  if (evt.key === 'Enter') {
+    evt.preventDefault();
+
+  }
+});
