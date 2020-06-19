@@ -70,7 +70,7 @@ mapPinMain.addEventListener('mousedown', function (evt) {
     adForm.classList.remove('ad-form--disabled');
     adFormFieldsets.removeAttribute('disabled');
     mapFilters.classList.remove('map__filters--disabled');
-  };
+  }
   var adFormAddress = document.querySelector('#address');
   adFormAddress.textContent = evt.target.value;
 });
@@ -78,6 +78,5 @@ mapPinMain.addEventListener('mousedown', function (evt) {
 mapPinMain.addEventListener('keydown', function (evt) {
   if (evt.key === 'Enter') {
     evt.preventDefault();
-
   }
 });
