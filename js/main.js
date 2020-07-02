@@ -36,9 +36,6 @@ var objects = function () {
   return objectsList;
 };
 
-var map = document.querySelector('.map');
-map.classList.remove('map--faded');
-
 var mocks = objects();
 var mapPins = document.querySelector('.map__pins');
 var pin = document.querySelector('#pin')
@@ -57,3 +54,111 @@ for (var j = 0; j < mocks.length; j++) {
   fragment.appendChild(mapElement);
 }
 mapPins.appendChild(fragment);
+
+var adFormFieldsets = document.querySelector('.ad-form fieldset');
+adFormFieldsets.setAttribute('disabled', 'disabled');
+
+var mapFilters = document.querySelector('.map__filters');
+mapFilters.classList.add('map__filters--disabled');
+
+var MAP_PIN_MAIN_WIDTH = 62;
+var MAP_PIN_MAIN_HEIGHT = 62;
+var MAP_PIN_MAIN_AFTER_HEIGHT = 22;
+var mapPinMain = document.querySelector('.map__pin--main');
+var adFormAddress = document.querySelector('#address');
+var offsetLeft = mapPinMain.offsetLeft;
+var offsetTop = mapPinMain.offsetTop;
+var LEFT_BUTTON = 1;
+
+adFormAddress.value = (offsetLeft + (MAP_PIN_MAIN_WIDTH / 2)) + ', ' + (offsetTop + (MAP_PIN_MAIN_HEIGHT / 2));
+var fieldsets = document.querySelectorAll('fieldset');
+for (var i = 0; i < fieldsets.length; i++) {
+  fieldsets[i].setAttribute('disabled', '');
+}
+
+var initMap = function () {
+  var map = document.querySelector('.map');
+  map.classList.remove('map--faded');
+  var adForm = document.querySelector('.ad-form');
+  adForm.classList.remove('ad-form--disabled');
+  adFormFieldsets.removeAttribute('disabled');
+  mapFilters.classList.remove('map__filters--disabled');
+  adFormAddress.value = (offsetLeft + (MAP_PIN_MAIN_WIDTH / 2)) + ', ' + (offsetTop + (MAP_PIN_MAIN_HEIGHT / 2) + MAP_PIN_MAIN_AFTER_HEIGHT);
+
+  for (var k = 0; k < fieldsets.length; k++) {
+    fieldsets[k].removeAttribute('disabled', '');
+  }
+};
+
+mapPinMain.addEventListener('mousedown', function (evt) {
+  if (evt.which === LEFT_BUTTON) {
+    initMap();
+  }
+});
+
+mapPinMain.addEventListener('keydown', function (evt) {
+  if (evt.key === 'Enter') {
+    evt.preventDefault();
+    initMap();
+  }
+});
+
+var adFormTime = document.querySelector('.ad-form__element--time');
+adFormTime.onchange = function (evt) {
+  var timeIn = document.querySelector('#timein');
+  var timeOut = document.querySelector('#timeout');
+  timeIn.value = evt.target.value;
+  timeOut.value = evt.target.value;
+};
+
+var type = document.querySelector('#type');
+var price = document.querySelector('#price');
+type.onchange = function () {
+  if (type.value === 'bungalo') {
+    price.placeholder = '0';
+    price.min = 0;
+  } if (type.value === 'flat') {
+    price.placeholder = '1000';
+    price.min = 1000;
+  } if (type.value === 'house') {
+    price.placeholder = '5000';
+    price.min = 5000;
+  } if (type.value === 'palace') {
+    price.placeholder = '10000';
+    price.min = 10000;
+  }
+};
+
+var adForm = document.querySelector('.ad-form');
+var roomNumber = document.getElementById('room_number');
+var capacity = document.getElementById('capacity');
+
+function validateRooms() {
+  var roomNumberOptions = parseInt(roomNumber.options[roomNumber.selectedIndex].value, 10);
+  var capacityOptions = parseInt(capacity.options[capacity.selectedIndex].value, 10);
+  if (
+    (roomNumberOptions !== 100 && capacityOptions === 0) ||
+    (roomNumberOptions === 100 && capacityOptions !== 0) ||
+    (roomNumberOptions < capacityOptions)
+  ) {
+    roomNumber.setCustomValidity('Количество комнат должно соответствовать количеству гостей');
+  } else {
+    roomNumber.setCustomValidity('');
+  }
+  adForm.reportValidity();
+}
+
+roomNumber.addEventListener('change', function () {
+  validateRooms();
+});
+
+capacity.addEventListener('change', function () {
+  validateRooms();
+});
+
+adForm.addEventListener('submit', function (evt) {
+  validateRooms();
+  if (!adForm.checkValidity()) {
+    evt.preventDefault();
+  }
+});
