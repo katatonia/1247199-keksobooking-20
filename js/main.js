@@ -85,8 +85,8 @@ var initMap = function () {
   mapFilters.classList.remove('map__filters--disabled');
   adFormAddress.value = (offsetLeft + (MAP_PIN_MAIN_WIDTH / 2)) + ', ' + (offsetTop + (MAP_PIN_MAIN_HEIGHT / 2) + MAP_PIN_MAIN_AFTER_HEIGHT);
 
-  for (var i = 0; i < fieldsets.length; i++) {
-    fieldsets[i].removeAttribute('disabled', '');
+  for (var k = 0; k < fieldsets.length; k++) {
+    fieldsets[k].removeAttribute('disabled', '');
   }
 };
 
@@ -129,42 +129,36 @@ type.onchange = function () {
   }
 };
 
-var roomNumber = document.querySelector('#room_number');
-var capacity = document.querySelector('#capacity');
+var adForm = document.querySelector('.ad-form');
+var roomNumber = document.getElementById('room_number');
+var capacity = document.getElementById('capacity');
 
-capacity.selectedIndex = '2';
-capacity.options[0].disabled = true;
-capacity.options[1].disabled = true;
-capacity.options[3].disabled = true;
+function validateRooms() {
+  var roomNumberOptions = parseInt(roomNumber.options[roomNumber.selectedIndex].value, 10);
+  var capacityOptions = parseInt(capacity.options[capacity.selectedIndex].value, 10);
+  if (
+    (roomNumberOptions !== 100 && capacityOptions === 0) ||
+    (roomNumberOptions === 100 && capacityOptions !== 0) ||
+    (roomNumberOptions < capacityOptions)
+  ) {
+    roomNumber.setCustomValidity('Количество комнат должно соответствовать количеству гостей');
+  } else {
+    roomNumber.setCustomValidity('');
+  }
+  adForm.reportValidity();
+}
 
+roomNumber.addEventListener('change', function () {
+  validateRooms();
+});
 
-roomNumber.onchange = function () {
-  if (roomNumber.selectedIndex === '0') {
-    capacity.selectedIndex = '2';
-    capacity.options[0].disabled = true;
-    capacity.options[1].disabled = true;
-    capacity.options[3].disabled = true;
-    capacity.options[2].disabled = false;
+capacity.addEventListener('change', function () {
+  validateRooms();
+});
+
+adForm.addEventListener('submit', function (evt) {
+  validateRooms();
+  if (!adForm.checkValidity()) {
+    evt.preventDefault();
   }
-  if (roomNumber.selectedIndex === '1') {
-    capacity.selectedIndex = '1';
-    capacity.options[0].disabled = true;
-    capacity.options[2].disabled = true;
-    capacity.options[3].disabled = true;
-    capacity.options[1].disabled = false;
-  }
-  if (roomNumber.selectedIndex === '2') {
-    capacity.selectedIndex = '0';
-    capacity.options[1].disabled = true;
-    capacity.options[2].disabled = true;
-    capacity.options[3].disabled = true;
-    capacity.options[0].disabled = false;
-  }
-  if (roomNumber.selectedIndex === '3') {
-    capacity.selectedIndex = '3';
-    capacity.options[0].disabled = true;
-    capacity.options[1].disabled = true;
-    capacity.options[2].disabled = true;
-    capacity.options[3].disabled = false;
-  }
-};
+});
