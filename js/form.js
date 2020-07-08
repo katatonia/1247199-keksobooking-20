@@ -6,7 +6,8 @@
   var adFormFieldsets = document.querySelector('.ad-form fieldset');
   adFormFieldsets.setAttribute('disabled', 'disabled');
 
-  window.map.adFormAddress.value = (window.map.offsetLeft + (window.map.MAP_PIN_MAIN_WIDTH / 2)) + ', ' + (window.map.offsetTop + (window.map.MAP_PIN_MAIN_HEIGHT / 2));
+  window.map.adFormAddress.value = window.map.createAddress();
+
   var fieldsets = document.querySelectorAll('fieldset');
   for (var i = 0; i < fieldsets.length; i++) {
     fieldsets[i].setAttribute('disabled', '');
@@ -22,7 +23,7 @@
 
   var type = document.querySelector('#type');
   var price = document.querySelector('#price');
-  type.onchange = function () {
+  type.addEventListener('change', function () {
     if (type.value === 'bungalo') {
       price.placeholder = '0';
       price.min = 0;
@@ -36,7 +37,7 @@
       price.placeholder = '10000';
       price.min = 10000;
     }
-  };
+  });
 
   var adForm = document.querySelector('.ad-form');
   var roomNumber = document.getElementById('room_number');

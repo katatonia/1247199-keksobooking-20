@@ -3,7 +3,7 @@
 // Создаёт метки на карте
 
 (function () {
-  var mocks = window.card.objects();
+  var mocks = window.card.generateMocks();
   var mapPins = document.querySelector('.map__pins');
   var pin = document.querySelector('#pin')
 .content
@@ -21,4 +21,8 @@
     fragment.appendChild(mapElement);
   }
   mapPins.appendChild(fragment);
+
+  window.pin = {
+    fragment: fragment
+  };
 })();

@@ -15,6 +15,10 @@
   var offsetTop = mapPinMain.offsetTop;
   var LEFT_BUTTON = 1;
 
+  var createAddress = function () {
+    return (offsetLeft + MAP_PIN_MAIN_WIDTH / 2) + ', ' + (offsetTop + MAP_PIN_MAIN_HEIGHT / 2);
+  };
+
   var initMap = function () {
     var map = document.querySelector('.map');
     map.classList.remove('map--faded');
@@ -49,6 +53,7 @@
     offsetLeft: offsetLeft,
     offsetTop: offsetTop,
     MAP_PIN_MAIN_WIDTH: MAP_PIN_MAIN_WIDTH,
-    MAP_PIN_MAIN_HEIGHT: MAP_PIN_MAIN_HEIGHT
+    MAP_PIN_MAIN_HEIGHT: MAP_PIN_MAIN_HEIGHT,
+    createAddress: createAddress
   };
 })();

@@ -3,7 +3,7 @@
 // Создаёт карточки объявлений
 
 (function () {
-  var objects = function () {
+  var generateMocks = function () {
     var objectsList = [];
     for (var i = 1; i <= 8; i++) {
       var typeList = ['palace', 'flat', 'house', 'bungalo'];
@@ -39,7 +39,36 @@
     return objectsList;
   };
 
+  // var map = document.querySelector('.map');
+  // var cardTemplate = document.querySelector('#card')
+  // .content
+  // .querySelector('.map__card');
+
+  // for (var i = 0; i < generateMocks.length; i++) {
+  //   var cardElement = cardTemplate.cloneNode(true);
+  //   var card = generateMocks[i];
+  //   var title = cardElement.querySelector('.popup__title');
+  //   title.textContent = card.offer.title;
+  //   var address = cardElement.querySelector('.popup__text--address');
+  //   address.textContent = card.offer.address;
+  //   var price = cardElement.querySelector('.popup__text--price');
+  //   price.textContent = card.offer.price + ' ₽/ночь';
+  //   // var type = cardElement.querySelector('.popup__type');
+  //   // if (type === 'Квартира') {
+  //   //   card.offer.type = 'flat';
+  //   // }
+  //   //offer.rooms
+  //   //offer.checkin
+  //   //features
+  //   var description = cardElement.querySelector('.popup__description');
+  //   description.textContent = card.offer.description;
+  //   //photos
+  //   //скрытие карточки
+  //   window.pin.fragment.appendChild(cardElement);
+  // }
+  // map.appendChild(window.pin.fragment);
+
   window.card = {
-    objects: objects
+    generateMocks: generateMocks
   };
 })();
