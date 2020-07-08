@@ -20,6 +20,7 @@
   };
 
   var initMap = function () {
+    window.pin.createPins();
     var map = document.querySelector('.map');
     map.classList.remove('map--faded');
     var adForm = document.querySelector('.ad-form');

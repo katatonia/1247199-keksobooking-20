@@ -39,34 +39,36 @@
     return objectsList;
   };
 
-  // var map = document.querySelector('.map');
-  // var cardTemplate = document.querySelector('#card')
-  // .content
-  // .querySelector('.map__card');
-
-  // for (var i = 0; i < generateMocks.length; i++) {
-  //   var cardElement = cardTemplate.cloneNode(true);
-  //   var card = generateMocks[i];
-  //   var title = cardElement.querySelector('.popup__title');
-  //   title.textContent = card.offer.title;
-  //   var address = cardElement.querySelector('.popup__text--address');
-  //   address.textContent = card.offer.address;
-  //   var price = cardElement.querySelector('.popup__text--price');
-  //   price.textContent = card.offer.price + ' ₽/ночь';
-  //   // var type = cardElement.querySelector('.popup__type');
-  //   // if (type === 'Квартира') {
-  //   //   card.offer.type = 'flat';
-  //   // }
-  //   //offer.rooms
-  //   //offer.checkin
-  //   //features
-  //   var description = cardElement.querySelector('.popup__description');
-  //   description.textContent = card.offer.description;
-  //   //photos
-  //   //скрытие карточки
-  //   window.pin.fragment.appendChild(cardElement);
-  // }
-  // map.appendChild(window.pin.fragment);
+  var map = document.querySelector('.map');
+  var cardTemplate = document.querySelector('#card')
+  .content
+  .querySelector('.map__card');
+  var cardFragment = document.createDocumentFragment();
+  for (var i = 0; i < generateMocks.length; i++) {
+    var cardElement = cardTemplate.cloneNode(true);
+    var card = generateMocks[i];
+    var title = cardElement.querySelector('.popup__title');
+    title.textContent = card.offer.title;
+    var address = cardElement.querySelector('.popup__text--address');
+    address.textContent = card.offer.address;
+    var price = cardElement.querySelector('.popup__text--price');
+    price.textContent = card.offer.price + ' ₽/ночь';
+    // var type = cardElement.querySelector('.popup__type');
+    var rooms = cardElement.querySelector('.popup__text--capacity');
+    rooms.textContent = card.offer.rooms + ' комнаты для ' + card.offer.guests + 'гостей';
+    var time = cardElement.querySelector('.popup__text--time');
+    time.textContent = 'Заезд после ' + card.offer.checkin + ', ' + 'выезд до ' + card.offer.checkout;
+    // var features = cardElement.querySelector('.popup__features');
+    // if () {
+    //   features.textContent =
+    // }
+    var description = cardElement.querySelector('.popup__description');
+    description.textContent = card.offer.description;
+    //photos
+    //скрытие карточки
+    cardFragment.appendChild(cardElement);
+  }
+  map.appendChild(cardFragment);
 
   window.card = {
     generateMocks: generateMocks
