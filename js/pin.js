@@ -3,7 +3,7 @@
 // Создаёт метки на карте
 
 (function () {
-  var createPins = function() {
+  var createPins = function () {
     var mocks = window.card.generateMocks();
     var mapPins = document.querySelector('.map__pins');
     var pin = document.querySelector('#pin')
