@@ -3,6 +3,9 @@
 // Создаёт карточки объявлений
 
 (function () {
+  function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
   var generateMocks = function () {
     var objectsList = [];
     for (var i = 1; i <= 8; i++) {
@@ -20,11 +23,11 @@
         'title': 'Случайная строка ' + i,
         'address': '' + i + ', ' + i,
         'price': i * 100,
-        'type': typeList[Math.random() * (3 - 0) + 0],
-        'rooms': Math.random() * (6 - 1) + 1,
-        'guests': Math.random() * (9 - 1) + 1,
-        'checkin': checkinList[Math.random() * (2 - 0) + 0],
-        'checkout': checkoutList[Math.random() * (2 - 0) + 0],
+        'type': typeList[getRandomInt(0, typeList.length - 1)],
+        'rooms': getRandomInt(0, 100),
+        'guests': getRandomInt(0, 3),
+        'checkin': checkinList[getRandomInt(0, checkinList.length - 1)],
+        'checkout': checkoutList[getRandomInt(0, checkoutList.length - 1)],
         'features': featuresList.slice(0, Math.random() * (5 - 1) + 1),
         'description': 'Случайная строка с описанием',
         'photos': photosList.slice(0, Math.random() * (3 - 1) + 1),
@@ -43,16 +46,18 @@
   var cardTemplate = document.querySelector('#card')
   .content
   .querySelector('.map__card');
-  var cardFragment = document.createDocumentFragment();
-  for (var i = 0; i < generateMocks.length; i++) {
+
+  function createCard(card) {
+    var cardFragment = document.createDocumentFragment();
     var cardElement = cardTemplate.cloneNode(true);
-    var card = generateMocks[i];
     var title = cardElement.querySelector('.popup__title');
     title.textContent = card.offer.title;
     var address = cardElement.querySelector('.popup__text--address');
     address.textContent = card.offer.address;
     var price = cardElement.querySelector('.popup__text--price');
-    price.textContent = card.offer.price + ' ₽/ночь';
+    if (card.offer.price !== null) {
+      price.textContent = card.offer.price + ' ₽/ночь';
+    }
     var type = cardElement.querySelector('.popup__type');
     switch (card.offer.type) {
       case 'flat':
@@ -69,26 +74,40 @@
         break;
     }
     var rooms = cardElement.querySelector('.popup__text--capacity');
-    rooms.textContent = card.offer.rooms + ' комнаты для ' + card.offer.guests + 'гостей';
+    if (card.offer.rooms !== null && card.offer.guests !== null) {
+      rooms.textContent = card.offer.rooms + ' комнаты для ' + card.offer.guests + ' гостей';
+    }
     var time = cardElement.querySelector('.popup__text--time');
-    time.textContent = 'Заезд после ' + card.offer.checkin + ', ' + 'выезд до ' + card.offer.checkout;
-    // var features = cardElement.querySelector('.popup__features');
-    // for (var j = 0; j < card.offer.features.length; j++) {
-    //   var featSelect = cardElement.querySelector('.popup__feature--' + card.offer.features[j]);
-    //   featSelect.textContent = card.offer.features[j];
-    // }
+    if (card.offer.checkin !== null && card.offer.checkout !== null) {
+      time.textContent = 'Заезд после ' + card.offer.checkin + ', ' + 'выезд до ' + card.offer.checkout;
+    }
+    var features = cardElement.querySelector('.popup__features');
+    while (features.firstElementChild !== null) {
+      features.firstElementChild.remove();
+    }
+    for (var j = 0; j < card.offer.features.length; j++) {
+      var feature = document.createElement('li');
+      feature.className = 'popup__feature popup__feature--' + card.offer.features[j];
+      features.appendChild(feature);
+    }
     var description = cardElement.querySelector('.popup__description');
     description.textContent = card.offer.description;
-    // var photos = cardElement.querySelector('popup__photos');
-    // for (var i = 0; i < card.offer.photos; i++) {
-
-    // }
-    //скрытие карточки
+    var photos = cardElement.querySelector('.popup__photos');
+    var photoTemplate = photos.firstElementChild.cloneNode(true);
+    photos.firstElementChild.remove();
+    for (var i = 0; i < card.offer.photos.length; i++) {
+      var photo = photoTemplate.cloneNode(true);
+      photo.src = card.offer.photos[i];
+      photos.appendChild(photo);
+    }
+    var avatar = cardElement.querySelector('.popup__avatar');
+    avatar.src = card.author.avatar;
     cardFragment.appendChild(cardElement);
+    map.insertAdjacentElement('afterbegin', cardFragment.firstElementChild);
   }
-  map.appendChild(cardFragment);
 
   window.card = {
-    generateMocks: generateMocks
+    generateMocks: generateMocks,
+    createCard: createCard
   };
 })();
