@@ -104,6 +104,18 @@
     avatar.src = card.author.avatar;
     cardFragment.appendChild(cardElement);
     map.insertAdjacentElement('afterbegin', cardFragment.firstElementChild);
+
+    var mapCardCloseButton = cardElement.querySelector('.popup__close');
+    if (mapCardCloseButton) {
+      mapCardCloseButton.addEventListener('click', function (evt) {
+        evt.target.parentElement.style.display = 'none';
+      });
+      document.onkeydown = function (evt) {
+        if (evt.keyCode === 27) {
+          cardElement.style.display = 'none';
+        }
+      };
+    }
   }
 
   window.card = {

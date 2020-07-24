@@ -22,7 +22,7 @@
   var initMap = function () {
     var mocks = window.card.generateMocks();
     window.pin.createPins(mocks);
-    window.card.createCard(mocks[0]);
+    window.pin.initPinListener(mocks);
     var map = document.querySelector('.map');
     map.classList.remove('map--faded');
     var adForm = document.querySelector('.ad-form');
@@ -38,16 +38,21 @@
     }
   };
 
-  mapPinMain.addEventListener('mousedown', function (evt) {
+  function onMainPinClick(evt) {
     if (evt.which === LEFT_BUTTON) {
       initMap();
+      mapPinMain.removeEventListener('mousedown', onMainPinClick);
     }
-  });
+  }
 
-  mapPinMain.addEventListener('keydown', function (evt) {
+  mapPinMain.addEventListener('mousedown', onMainPinClick);
+
+
+  document.addEventListener('keydown', function onPinClick(evt) {
     if (evt.key === 'Enter') {
       evt.preventDefault();
       initMap();
+      document.removeEventListener('keydown', onPinClick);
     }
   });
 
@@ -57,6 +62,7 @@
     offsetTop: offsetTop,
     MAP_PIN_MAIN_WIDTH: MAP_PIN_MAIN_WIDTH,
     MAP_PIN_MAIN_HEIGHT: MAP_PIN_MAIN_HEIGHT,
-    createAddress: createAddress
+    createAddress: createAddress,
+    initMap: initMap,
   };
 })();

@@ -66,9 +66,60 @@
     validateRooms();
   });
 
+  function success() {
+    var mapFiltersContainer = document.querySelector('.map__filters-container');
+    var successTemplate = document.querySelector('#success')
+    .content
+    .querySelector('.success');
+    var successFragment = document.createDocumentFragment();
+    var successMessage = successTemplate.cloneNode(true);
+    successFragment.appendChild(successMessage);
+    mapFiltersContainer.appendChild(successFragment);
+  }
+
+  function error() {
+    var mainContainer = document.querySelector('main');
+    var errorTemplate = document.querySelector('#error')
+    .content
+    .querySelector('.error');
+    var errorFragment = document.createDocumentFragment();
+    var errorMessage = errorTemplate.cloneNode(true);
+    errorFragment.appendChild(errorMessage);
+    mainContainer.appendChild(errorFragment);
+
+    var errorButton = errorMessage.querySelector('.error__button');
+    errorButton.addEventListener('click', function (evt) {
+      evt.target.parentElement.style.display = 'none';
+    });
+    document.onkeydown = function (evt) {
+      if (evt.keyCode === 27) {
+        errorMessage.style.display = 'none';
+      }
+    };
+    document.addEventListener('click', function (evt) {
+      if (!errorMessage.contains(evt.target)) {
+        errorMessage.style.display = 'none';
+      }
+    });
+  }
+
+  var adFormReset = document.querySelector('.ad-form__reset');
+  adFormReset.addEventListener('click', function () {
+    window.map.initMap();
+  });
+
   adForm.addEventListener('submit', function (evt) {
     validateRooms();
     if (!adForm.checkValidity()) {
+      error();
+      evt.preventDefault();
+    } else {
+      var formData = new FormData(document.forms.adForm);
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', 'https://javascript.pages.academy/keksobooking');
+      xhr.send(formData);
+      window.map.initMap();
+      success();
       evt.preventDefault();
     }
   });
